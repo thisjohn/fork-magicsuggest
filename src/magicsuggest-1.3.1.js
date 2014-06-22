@@ -21,6 +21,8 @@
          * @param defaults - see config below
          */
         var defaults = {
+            takeOutSelectedValue: true,
+
             /**********  CONFIGURATION PROPERTIES ************/
             /**
              * @cfg {Boolean} allowFreeEntries
@@ -996,7 +998,7 @@
              */
             _renderSelection: function() {
                 var ref = this, w = 0, inputOffset = 0, items = [],
-                    asText = cfg.resultAsString === true && !_hasFocus;
+                    asText = cfg.resultAsString === true /*&& !_hasFocus*/;
 
                 ms.selectionContainer.find('.ms-sel-item').remove();
                 if(ms._valueContainer !== undefined) {
@@ -1105,11 +1107,16 @@
                     filtered = data;
                 }
                 // take out the ones that have already been selected
-                $.each(filtered, function(index, obj) {
-                    if($.inArray(obj[cfg.valueField], selectedValues) === -1) {
-                        newSuggestions.push(obj);
-                    }
-                });
+                if (cfg.takeOutSelectedValue === true) {
+                    $.each(filtered, function(index, obj) {
+                        if($.inArray(obj[cfg.valueField], selectedValues) === -1) {
+                            newSuggestions.push(obj);
+                        }
+                    });
+                }
+                else {
+                    newSuggestions = filtered;
+                }
                 // sort the data
                 if(cfg.sortOrder !== null) {
                     newSuggestions.sort(function(a,b) {
