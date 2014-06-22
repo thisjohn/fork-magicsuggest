@@ -886,6 +886,11 @@
                     readonly: !cfg.editable,
                     disabled: cfg.disabled
                 }, cfg.inputCfg)).width(w - (cfg.hideTrigger ? 16 : 42));
+                if (!cfg.editable) {
+                    ms.input.on('focus', function() {
+                        this.blur();
+                    });
+                }
 
                 ms.input.focus($.proxy(handlers._onInputFocus, this));
                 ms.input.click($.proxy(handlers._onInputClick, this));
