@@ -845,6 +845,24 @@
                         return;
                     } else if(typeof(data) === 'string' && data.indexOf(',') > -1) { // results from csv string
                         _cbData = self._getEntriesFromStringArray(data.split(','));
+                    } else if(Backbone != undefined && data instanceof Backbone.Collection) {
+                        $(ms).trigger('beforeload', [ms]);
+                        data.fetch({
+                            success: function(collection, response, options) {
+                                var data = [];
+                                var models = collection.models || [];
+                                for (var i in models) {
+                                    var model = models[i];
+                                    data.push({
+                                        id: model.id,
+                                        name: model.get('name') || model.id
+                                    });
+                                }
+                                self._processSuggestions(data);
+                                $(ms).trigger('load', [ms, data]);
+                            }
+                        });
+                        return;
                     } else { // results from local array
                         if(data.length > 0 && typeof(data[0]) === 'string') { // results from array of strings
                             _cbData = self._getEntriesFromStringArray(data);
