@@ -9,7 +9,16 @@
  * Version: 1.3.1
  * Licence: MagicSuggest is licenced under MIT licence (http://www.opensource.org/licenses/mit-license.php)
  */
-(function($)
+(function (factory) {
+    'use strict';
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(['jquery'], factory);
+    } else {
+        // Browser globals
+        factory(jQuery);
+    }
+}(function($)
 {
     "use strict";
     var MagicSuggest = function(element, options)
